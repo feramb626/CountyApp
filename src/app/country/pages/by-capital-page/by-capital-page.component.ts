@@ -13,12 +13,21 @@ import { Country } from '../../interfaces/country';
 export class ByCapitalPageComponent {
 
   public countries: Country[] = [];
+  public isloading: boolean = false;
+
 
   constructor(private CountryService: CountryService) { }
 
   public searchbyCapital(termino: string): void {
+    this.isloading = true;
+
     this.CountryService.searchCapital(termino)
-      .subscribe( resp => { this.countries = resp; })
+      .subscribe( resp => {
+        this.countries = resp;
+        this.isloading = false;
+      });
+
+    // this.isloading = false;
 
   };
 

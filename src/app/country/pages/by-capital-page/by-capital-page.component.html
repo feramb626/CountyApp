@@ -9,7 +9,7 @@
     <!-- Searchbos -->
     <shared-search-box
       placeholder="Buscar por Capital"
-      (onValue)="searchbyCapital( $event )"
+      (ondebounce)="searchbyCapital( $event )"
     >
 
     </shared-search-box>
@@ -21,15 +21,13 @@
   <div class="col">
     <!-- tabla de resultados -->
     <hr>
+    <shared-loading-spiner *ngIf="isloading">
+
+    </shared-loading-spiner>
     <country-table
       [countries]="countries"
     >
 
     </country-table>
-    <!-- <ul>
-      <li *ngFor="let country of countries">
-        {{ country.name.common }} - {{ country.name.common }}
-      </li>
-    </ul> -->
   </div>
 </div>

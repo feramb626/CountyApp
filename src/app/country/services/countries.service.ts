@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, count, map, of, tap } from 'rxjs';
+import { Observable, catchError, count, delay, map, of, tap } from 'rxjs';
 import { Country, Name } from '../interfaces/country';
 import { CountriesRoutingModule } from '../countries-routing.module';
 
@@ -9,8 +9,29 @@ export class CountryService {
 
   private url = 'https://restcountries.com/v3.1';
 
-
   constructor(private http : HttpClient) { }
+
+  private getcountriesrequest( urt: string): Observable<Country[]>{
+    return this.http.get<Country[]>(urt)
+      .pipe(
+        catchError( err => of([])),
+      );
+  }
+
+  searchCapital(capital: string): Observable<Country[]> {
+    const url = `${this.url}/capital/${capital}`;
+    return this.getcountriesrequest(url);
+    }
+
+    searchRegion(region: string): Observable<Country[]> {
+      const url = `${this.url}/region/${region}`;
+      return this.getcountriesrequest(url);
+    }
+
+  searchCountry(country: string): Observable<Country[]> {
+    const url = `${this.url}/name/${country}`;
+    return this.getcountriesrequest(url);
+  }
 
   searchbyalpha(idi: string): Observable<Country | null> {
     return this.http.get<Country[]>(`${this.url}/alpha/${idi}`)
@@ -19,27 +40,4 @@ export class CountryService {
         catchError( err => of(null))
       );
   }
-
-
-  searchCapital(capital: string): Observable<Country[]> {
-    return this.http.get<Country[]>(`${this.url}/capital/${capital}`)
-      .pipe(
-        catchError( err => of([]))
-      );
-  }
-
-  searchRegion(region: string): Observable<Country[]> {
-    return this.http.get<Country[]>(`${this.url}/region/${region}`)
-      .pipe(
-        catchError( err => of([]))
-      );
-  }
-
-  searchCountry(country: string): Observable<Country[]> {
-    return this.http.get<Country[]>(`${this.url}/name/${country}`)
-      .pipe(
-        catchError( err => of([]))
-      );
-  }
-
 }
